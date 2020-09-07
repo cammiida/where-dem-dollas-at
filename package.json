@@ -35,5 +35,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "babel-loader": "^8.1.0",
+    "fork-ts-checker-webpack-plugin": "^5.1.0",
+    "react-is": "^16.13.1",
+    "ts-loader": "^8.0.2"
   }
 }
