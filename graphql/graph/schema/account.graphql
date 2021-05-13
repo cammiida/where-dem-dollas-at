@@ -1,0 +1,19 @@
+type Account {
+  id: ID!
+  name: String!
+  user: User!
+  active: Boolean!
+}
+
+extend type Mutation {
+  createAccount(input: NewAccount!): Account!
+}
+
+input NewAccount {
+  name: String!
+  userId: String!
+}
+
+extend type Query {
+  accounts: [Account!]!
+}
