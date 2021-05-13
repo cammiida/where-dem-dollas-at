@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"wdda-gql/graph"
-	"wdda-gql/graph/generated"
+	"wdda-gql/graph/exec"
+	"wdda-gql/graph/resolver"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -19,7 +19,7 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: graph.NewResolver()}))
+	srv := handler.NewDefaultServer(exec.NewExecutableSchema(exec.Config{Resolvers: resolver.NewResolver()}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	http.Handle("/graphql", srv)

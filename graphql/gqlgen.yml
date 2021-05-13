@@ -22,7 +22,7 @@ schema:
 # Where should the generated server code go?
 exec:
   filename: graph/exec/exec_gen.go
-  package: generated
+  package: exec
 
 # Uncomment to enable federation
 # federation:

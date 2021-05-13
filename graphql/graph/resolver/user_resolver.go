@@ -6,7 +6,7 @@ package resolver
 import (
 	"context"
 	"fmt"
-	generated "wdda-gql/graph/exec"
+	exec "wdda-gql/graph/exec"
 	"wdda-gql/graph/model"
 )
 
@@ -30,17 +30,17 @@ func (r *userResolver) Accounts(ctx context.Context, obj *model.User) ([]*model.
 	panic(fmt.Errorf("not implemented"))
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+// Mutation returns exec.MutationResolver implementation.
+func (r *Resolver) Mutation() exec.MutationResolver { return &mutationResolver{r} }
 
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+// Query returns exec.QueryResolver implementation.
+func (r *Resolver) Query() exec.QueryResolver { return &queryResolver{r} }
 
-// Subscription returns generated.SubscriptionResolver implementation.
-func (r *Resolver) Subscription() generated.SubscriptionResolver { return &subscriptionResolver{r} }
+// Subscription returns exec.SubscriptionResolver implementation.
+func (r *Resolver) Subscription() exec.SubscriptionResolver { return &subscriptionResolver{r} }
 
-// User returns generated.UserResolver implementation.
-func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
+// User returns exec.UserResolver implementation.
+func (r *Resolver) User() exec.UserResolver { return &userResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
