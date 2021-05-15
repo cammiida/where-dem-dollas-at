@@ -23,6 +23,7 @@ import { GetCurrentUser } from './__generated__/GetCurrentUser';
 /*
 TODO: Add dropzone or something similar
 TODO: Add function to read file content
+TODO: Add preview of file content
 TODO: Save parsed file content
 */
 
