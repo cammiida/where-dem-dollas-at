@@ -30,6 +30,7 @@ import MyComponent from './components/MyComponent/MyComponent';
 import { useStyles } from './AppStyles';
 import { gql, useQuery } from '@apollo/client';
 import { GetCurrentUser } from './__generated__/GetCurrentUser';
+import { CircularProgress } from '@material-ui/core';
 
 const theme = createMuiTheme({
     palette: {
@@ -86,6 +87,9 @@ function App(props: Props) {
         setDrawerOpen((prevState) => !prevState);
     };
 
+    if (loading) return <CircularProgress />;
+    if (error) return <div>An error occurred: {error.message}</div>;
+
     if (!currentUserData?.me) {
         return <>No user</>;
     }
@@ -96,6 +100,7 @@ function App(props: Props) {
             <Route exact path="/">
                 <MyComponent />
             </Route>
+            <Route path="add-transactions">Add transactions</Route>
             <Route>
                 <Container>404</Container>
             </Route>
