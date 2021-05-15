@@ -15,7 +15,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 }
 
 func (r *queryResolver) Me(ctx context.Context) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.users[0], nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {

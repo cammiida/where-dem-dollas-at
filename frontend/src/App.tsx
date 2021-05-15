@@ -29,6 +29,7 @@ import clsx from 'clsx';
 import MyComponent from './components/MyComponent/MyComponent';
 import { useStyles } from './AppStyles';
 import { gql, useQuery } from '@apollo/client';
+import { GetCurrentUser } from './__generated__/GetCurrentUser';
 
 const theme = createMuiTheme({
     palette: {
@@ -42,7 +43,7 @@ const theme = createMuiTheme({
     },
 });
 
-const GET_ME = gql`
+const GET_CURRENT_USER = gql`
     query GetCurrentUser {
         me {
             id
@@ -79,13 +80,15 @@ function App(props: Props) {
     // const classes = useStyles();
     const location = useLocation();
 
-    // const { data, loading, error } = useQuery<{ me: User }>(GET_ME);
+    const { data: currentUserData, loading, error } = useQuery<GetCurrentUser>(GET_CURRENT_USER);
 
     const toggleDrawer = () => {
         setDrawerOpen((prevState) => !prevState);
     };
 
-    // if (!data.)
+    if (!currentUserData?.me) {
+        return <>No user</>;
+    }
 
     const routes = (
         <Switch>

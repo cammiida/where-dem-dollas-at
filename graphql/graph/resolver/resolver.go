@@ -1,15 +1,32 @@
 package resolver
 
-import "wdda-gql/graph/exec"
+import (
+	"wdda-gql/graph/exec"
+	"wdda-gql/graph/model"
+)
 
 // This file will not be regenerated automatically.
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-type Resolver struct{}
+type Resolver struct {
+	accounts   []*model.Account
+	users      []*model.User
+	lastUserId int
+	usersChan  chan *model.User
+}
 
 func NewResolver() *Resolver {
-	return &Resolver{}
+	users := make([]*model.User, 0)
+	users = append(users, &model.User{ID: "1", Name: "Geir"})
+	users = append(users, &model.User{ID: "2", Name: "Mona"})
+
+	return &Resolver{
+		accounts:   make([]*model.Account, 0),
+		users:      users,
+		lastUserId: 3,
+		usersChan:  make(chan *model.User),
+	}
 }
 
 func NewQueryResolver(
