@@ -1,36 +1,30 @@
-import React, { useState } from 'react';
-import { Switch, Route, useLocation, Link } from 'react-router-dom';
-
-import {
-    AppBar,
-    Avatar,
-    Box,
-    Container,
-    CssBaseline,
-    Drawer,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    MenuList,
-    Toolbar,
-} from '@material-ui/core';
-
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { purple } from '@material-ui/core/colors';
-
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import BuildIcon from '@material-ui/icons/Build';
-
-import clsx from 'clsx';
-
-import MyComponent from './components/MyComponent/MyComponent';
-import { useStyles } from './AppStyles';
 import { gql, useQuery } from '@apollo/client';
+import {
+    CircularProgress,
+    Container,
+    createStyles,
+    CssBaseline,
+    makeStyles,
+    Theme,
+    Typography,
+} from '@material-ui/core';
+import { purple } from '@material-ui/core/colors';
+import { createMuiTheme } from '@material-ui/core/styles';
+import BuildIcon from '@material-ui/icons/Build';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import { ThemeProvider } from '@material-ui/styles';
+import React, { useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import AddTransactions from './components/features/transactions/AddTransactions';
+import { Sidebar } from './components/UI';
+import { SidebarItemType } from './types/Sidebar';
 import { GetCurrentUser } from './__generated__/GetCurrentUser';
-import { CircularProgress } from '@material-ui/core';
+
+/*
+TODO: Add dropzone or something similar
+TODO: Add function to read file content
+TODO: Save parsed file content
+*/
 
 const theme = createMuiTheme({
     palette: {
@@ -53,33 +47,20 @@ const GET_CURRENT_USER = gql`
     }
 `;
 
-const GET_USERS = gql`
-    query GetUsers {
-        users {
-            id
-        }
-    }
-`;
-
-type MenuItemType = {
-    name: string;
-    url: string;
-    icon: React.ReactNode;
-};
-
-const menuItems: MenuItemType[] = [
-    { name: 'Dashboard', url: '/dashboard', icon: <DashboardIcon /> },
+const sidebarItems: SidebarItemType[] = [
+    { name: 'Dashboard', url: '/', icon: <DashboardIcon /> },
     { name: 'Accounts', url: '/accounts', icon: <BuildIcon /> },
+    { name: 'Add Transactions', url: '/add-transactions', icon: <BuildIcon /> },
 ];
 
 type Props = {
     children?: React.ReactNode;
 };
 
-function App(props: Props) {
+const App: React.FC<Props> = (props: Props) => {
+    console.log(props);
+    const classes = useStyles();
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-    // const classes = useStyles();
-    const location = useLocation();
 
     const { data: currentUserData, loading, error } = useQuery<GetCurrentUser>(GET_CURRENT_USER);
 
@@ -96,86 +77,62 @@ function App(props: Props) {
 
     const routes = (
         <Switch>
-            <Route path="/accounts">Accounts</Route>
             <Route exact path="/">
-                <MyComponent />
+                <Typography>Home</Typography>
             </Route>
-            <Route path="add-transactions">Add transactions</Route>
+            <Route path="/accounts">
+                <Typography>Accounts</Typography>
+            </Route>
+            <Route path="/add-transactions">
+                <AddTransactions />
+            </Route>
             <Route>
                 <Container>404</Container>
             </Route>
         </Switch>
     );
 
-    const toolBar = (
-        <Toolbar /* className={classes.toolbar} */>
-            <Box /* className={classes.toolbarItem} */>
-                <Avatar>C</Avatar>
-            </Box>
-        </Toolbar>
-    );
-
-    const drawer = (
-        <Drawer
-            variant="permanent"
-            /* className={clsx(classes.drawer, {
-        [classes.drawerOpen]: drawerOpen,
-        [classes.drawerClose]: !drawerOpen,
-      })}
-      classes={{
-        paper: clsx({
-          [classes.drawerOpen]: drawerOpen,
-          [classes.drawerClose]: !drawerOpen,
-        }),
-      }} */
-        >
-            <MenuList>
-                {menuItems.map((menuItem, index) => {
-                    const selected =
-                        index === 0
-                            ? location.pathname === menuItem.url
-                            : location.pathname.includes(menuItem.url as string);
-
-                    return (
-                        <MenuItem key={menuItem.name} component={Link} to={menuItem.url} selected={selected}>
-                            <ListItemIcon>{menuItem.icon}</ListItemIcon>
-                            <ListItemText>{menuItem.name}</ListItemText>
-                        </MenuItem>
-                    );
-                })}
-            </MenuList>
-            <MenuItem
-                // className={classes.toggleDrawerButton}
-                button
-                onClick={toggleDrawer}
-            >
-                <ListItemIcon>{drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}</ListItemIcon>
-            </MenuItem>
-        </Drawer>
-    );
-
     return (
         <ThemeProvider theme={theme}>
-            <div /* className={classes.root} */>
+            <div className={classes.root}>
                 <CssBaseline />
-                <AppBar
-                    position="fixed"
-                    elevation={0}
-                    /* className={clsx(classes.appBar, {
-            [classes.appBarShift]: drawerOpen,
-          })} */
-                >
-                    {toolBar}
-                </AppBar>
-                {drawer}
 
-                <main /* className={classes.content} */>
-                    <div /* className={classes.toolbar} */ />
-                    {routes}
-                </main>
+                <Sidebar sidebarItems={sidebarItems} isOpen={drawerOpen} toggleOpen={toggleDrawer} />
+                <main className={classes.content}>{routes}</main>
             </div>
         </ThemeProvider>
     );
-}
+};
 
 export default App;
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+        },
+        appBar: {
+            zIndex: theme.zIndex.drawer - 100,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            backgroundColor: 'transparent',
+        },
+        appBarShift: {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+
+        content: {
+            flexGrow: 1,
+            padding: theme.spacing(3),
+        },
+    }),
+);
