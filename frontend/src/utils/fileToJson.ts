@@ -1,7 +1,10 @@
 import * as XLSX from 'xlsx';
 
-export const xlsxToJson = (file: File) => {
+export const xlsxToJson = async (file: File, callback: (data: unknown[]) => void) => {
     const reader = new FileReader();
+    // let parsedData: unknown[];
+    reader.readAsBinaryString(file);
+
     reader.onload = (e) => {
         const data = e.target?.result;
         let readData = XLSX.read(data, { type: 'binary' });
@@ -10,10 +13,6 @@ export const xlsxToJson = (file: File) => {
 
         /* Convert array to json*/
         const parsedData = XLSX.utils.sheet_to_json(ws, { header: 1 });
-        console.log(parsedData);
-        console.log('header: ', parsedData[0]);
-        return parsedData;
+        callback(parsedData);
     };
-
-    return reader.readAsBinaryString(file);
 };

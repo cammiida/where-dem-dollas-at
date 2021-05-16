@@ -13,7 +13,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import BuildIcon from '@material-ui/icons/Build';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { ThemeProvider } from '@material-ui/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AddTransactions from './components/features/transactions/AddTransactions';
 import { Sidebar } from './components/UI';
@@ -54,12 +54,7 @@ const sidebarItems: SidebarItemType[] = [
     { name: 'Add Transactions', url: '/add-transactions', icon: <BuildIcon /> },
 ];
 
-type Props = {
-    children?: React.ReactNode;
-};
-
-const App: React.FC<Props> = (props: Props) => {
-    console.log(props);
+const App: React.FC = () => {
     const classes = useStyles();
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
