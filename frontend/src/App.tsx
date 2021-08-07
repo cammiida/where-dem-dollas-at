@@ -10,14 +10,11 @@ import {
 } from '@material-ui/core';
 import { purple } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
-import BuildIcon from '@material-ui/icons/Build';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import { ThemeProvider } from '@material-ui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import AddTransactions from './components/features/transactions/AddTransactions';
 import { Sidebar } from './components/UI';
-import { SidebarItemType } from './types/Sidebar';
+import { sidebarItems } from './data/sidebarItems';
 import { GetCurrentUser } from './__generated__/GetCurrentUser';
 
 /*
@@ -48,12 +45,6 @@ const GET_CURRENT_USER = gql`
     }
 `;
 
-const sidebarItems: SidebarItemType[] = [
-    { name: 'Dashboard', url: '/', icon: <DashboardIcon /> },
-    { name: 'Accounts', url: '/accounts', icon: <BuildIcon /> },
-    { name: 'Add Transactions', url: '/add-transactions', icon: <BuildIcon /> },
-];
-
 const App: React.FC = () => {
     const classes = useStyles();
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -76,12 +67,11 @@ const App: React.FC = () => {
             <Route exact path="/">
                 <Typography>Home</Typography>
             </Route>
-            <Route path="/accounts">
-                <Typography>Accounts</Typography>
-            </Route>
-            <Route path="/add-transactions">
-                <AddTransactions />
-            </Route>
+            {sidebarItems.map((sidebarItem) => (
+                <Route key={sidebarItem.name} path={sidebarItem.url}>
+                    {sidebarItem.component ? sidebarItem.component : <Typography>{sidebarItem.name}</Typography>}
+                </Route>
+            ))}
             <Route>
                 <Container>404</Container>
             </Route>
