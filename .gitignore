@@ -2,14 +2,16 @@
 
 # dependencies
 node_modules/
-/.pnp
-.pnp.js
+.pnp/
+*/**/.pnp.js
 
 # testing
-/coverage
+coverage/
 
 # production
-/build
+build/
+.gradle/
+.idea/
 
 # misc
 .DS_Store

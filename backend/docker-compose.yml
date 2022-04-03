@@ -1,0 +1,12 @@
+services:
+  # Postgres DB
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres                   # define credentials
+      POSTGRES_PASSWORD: postgres               # define credentials
+      POSTGRES_DB: wdda                         # define database
+    ports:
+      - 127.0.0.1:5432:5432
